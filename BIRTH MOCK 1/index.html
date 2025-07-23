@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A heartfelt birthday surprise with photos and video." />
+  <title>Happy Birthday 🎉</title>
+
+  <!-- Favicon -->
+  <link rel="icon" href="assets/3a0be7e5d1d071fc782275aa89b72059.jpg" type="image/png" />
+
+  <!-- Google Fonts (preconnect + async load) -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto:wght@300;400;700&display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet" /></noscript>
+
+  <!-- Theme color for PWA/mobile address bar -->
+  <meta name="theme-color" content="#ff4081" />
+
+  <!-- Background music (muted until first interaction) -->
+  <audio autoplay loop muted id="bg-music">
+    <source src="assets/happy-birthday.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Swiper CSS (v11) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+  <style>
+    /* ---------- CSS Custom Properties ---------- */
+    :root {
+      --pink-50:  #ffe6f1;
+      --pink-100: #ffcce1;
+      --pink-200: #ff3380; /* darker cake color */
+      --pink-400: #ff4081;
+      --pink-600: #c2185b;
+      --bg-start: var(--pink-50);
+      --bg-end:   var(--pink-100);
+      --radius-pill: 9999px;
+      --shadow-card: 0 4px 14px rgba(0, 0, 0, 0.15);
+      --ease: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ---------- Reset && Base ---------- */
+    *,::before,::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth;font-size:16px}
+
+    body{
+      font-family:"Roboto",sans-serif;
+      background:linear-gradient(135deg,var(--bg-start),var(--bg-end));
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      min-height:100vh;padding:1.5rem;text-align:center;overflow-x:hidden;
+    }
+
+    h1{
+      font-family:"Pacifico",cursive;
+      font-size:clamp(2.5rem,5vw,4rem);
+      color:var(--pink-400);
+      margin-bottom:1rem;
+      filter:drop-shadow(0 2px 4px rgba(0,0,0,.15));
+      animation:fadeIn 2s var(--ease);
+    }
+
+    p{
+      max-width:45ch;font-size:1.2rem;line-height:1.8;margin-bottom:2rem;color:#5c0a33;animation:fadeIn 3s var(--ease);
+    }
+
+    .cta{display:flex;gap:.75rem;flex-wrap:wrap;justify-content:center;margin-bottom:1.5rem;animation:fadeIn 4s var(--ease);}
+
+    .btn{
+      display:inline-block;padding:.75rem 2rem;border-radius:var(--radius-pill);
+      background:var(--pink-400);color:#fff;font-weight:600;text-decoration:none;
+      transition:transform .2s var(--ease),box-shadow .2s var(--ease);
+      box-shadow:var(--shadow-card);position:relative;overflow:hidden;
+    }
+    .btn::before{content:"";position:absolute;top:0;left:-75%;width:50%;height:100%;background:rgba(255,255,255,.3);transform:skewX(-25deg);transition:left .5s var(--ease);}
+    .btn:hover::before{left:125%}
+    .btn-secondary{background:var(--pink-600)}
+    .btn:where(:hover,:focus-visible){transform:translateY(-2px) scale(1.05);box-shadow:0 8px 20px rgba(0,0,0,.2)}
+
+    @keyframes fadeIn{0%{opacity:0;transform:translateY(20px)}100%{opacity:1;transform:translateY(0)}}
+
+    /* ---------- Animated Cake ---------- */
+    .cake {
+      width: 120px;
+      height: 180px;
+      margin: 2rem auto;
+      position: relative;
+      animation: slideBounce 2s ease-out 1, floatCake 6s ease-in-out infinite;
+    }
+
+    @keyframes slideBounce {
+      0% { transform: translateY(-300px); opacity: 0; }
+      60% { transform: translateY(20px); opacity: 1; }
+      100% { transform: translateY(0); }
+    }
+    @keyframes floatCake {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .cake .layer {
+      width: 100%;
+      height: 40px;
+      background: var(--pink-200);
+      border-radius: 12px;
+      box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.4), 0 2px 6px rgba(0,0,0,0.2);
+      position: absolute;
+      animation: layerPop 0.8s ease-out forwards;
+      opacity: 0;
+    }
+    .cake .layer:nth-child(1) { top: 0;   animation-delay: 0.3s; }
+    .cake .layer:nth-child(2) { top: 40px; animation-delay: 0.6s; }
+    .cake .layer:nth-child(3) { top: 80px; animation-delay: 0.9s; }
+
+    @keyframes layerPop { to { opacity: 1; transform: scale(1.05); } }
+
+    .candle {
+      position: absolute;
+      top: -30px;
+      left: 50%;
+      width: 10px;
+      height: 30px;
+      background: #fff;
+      border-radius: 5px;
+      transform: translateX(-50%);
+      animation: fadeIn 2s 1.4s ease-out forwards;
+      opacity: 0;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+    }
+    .flame {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      width: 14px;
+      height: 14px;
+      background: radial-gradient(circle, yellow, orange);
+      border-radius: 50%;
+      transform: translateX(-50%);
+      animation: flicker 0.5s infinite, glow 1s infinite alternate;
+    }
+
+    @keyframes flicker {
+      0%,100% { transform: translateX(-50%) scale(1); opacity: 1; }
+      50%     { transform: translateX(-50%) scale(1.2); opacity: 0.6; }
+    }
+    @keyframes glow {
+      from { filter: drop-shadow(0 0 4px orange); }
+      to   { filter: drop-shadow(0 0 12px yellow); }
+    }
+
+    /* ---------- Floating Hearts ---------- */
+    .heart {
+      --size: 56px;
+      position: fixed;
+      width: var(--size);
+      height: var(--size);
+      background: var(--pink-400);
+      rotate: 45deg;
+      margin-left: calc(var(--size)/-2);
+      animation: floatDiag var(--dur) var(--ease) forwards;
+      opacity: 0;
+      filter: drop-shadow(0 0 8px rgba(255,0,102,.4));
+      pointer-events: none;
+      will-change: transform,opacity;
+      z-index: -1;
+    }
+    .heart::before,.heart::after{
+      content: "";
+      position: absolute;
+      width: var(--size);
+      height: var(--size);
+      background: inherit;
+      border-radius: 50%;
+    }
+    .heart::before{top: calc(var(--size)/-2); left: 0;}
+    .heart::after {left: calc(var(--size)/-2); top: 0;}
+
+    @keyframes floatDiag {
+      0%   {transform:translate(0,0) rotate(45deg) scale(.4); opacity:0}
+      10%  {opacity:1}
+      90%  {opacity:1}
+      100% {transform:translate(var(--tx),var(--ty)) rotate(45deg) scale(1.4); opacity:0}
+    }
+
+    /* Respect reduced‑motion */
+    @media(prefers-reduced-motion:reduce){.heart{display:none !important}*,::before,::after{animation:none !important;transition:none !important}}
+    @media(max-width:480px){p{font-size:1rem}.btn{padding:.6rem 1.4rem}}
+
+    /* ---------- Swiper fixes ---------- */
+    /* The container gets a responsive height via aspect‑ratio. */
+    .swiper.mySwiper {
+      width: min(92vw, 900px);
+      aspect-ratio: 16/9;    /* Keeps 16:9 on all screens */
+      max-height: 520px;     /* Upper limit for large desktops */
+      border-radius: 1rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,.25);
+      overflow: hidden;
+    }
+
+    .swiper-slide img, .swiper-slide video {
+      width: 80%;
+      height: 100%;
+      /* object-fit: cover; */
+      /* display: block; */
+    }
+  </style>
+</head>
+<body>
+  <main aria-labelledby="page-title">
+    <h1 id="page-title">Happy Birthday, ❤️</h1>
+    <p>You bring so much joy and light into my life. On this special day, I want you to know how deeply you are loved. 💖</p>
+
+    <!-- Cute animated cake -->
+    <div class="cake">
+      <div class="layer"></div>
+      <div class="layer"></div>
+      <div class="layer"></div>
+      <div class="candle"><div class="flame"></div></div>
+    </div>
+
+    <!-- CTA Buttons -->
+    <nav aria-label="Primary">
+      <div class="cta">
+        <a class="btn" href="gallery.html">View Our Memories 📸</a>
+        <a class="btn btn-secondary" href="video.html">Watch Video 🎥</a>
+      </div>
+    </nav>
+  </main>
+
+  <!-- ---------- Swiper Slideshow Section ---------- -->
+  <section id="memories" style="padding:3rem 0;">
+    <h2 style="font-family:'Pacifico',cursive;color:var(--pink-400);margin-bottom:1.5rem;">हमारी यादें 📸</h2>
+
+    <!--   Swiper container  -->
+    <div class="swiper mySwiper">
+      <div class="swiper-wrapper">
+        <!-- 🔄 अपनी फ़ोटो/वीडियो स्लाइडें यहाँ जोड़ें -->
+        <div class="swiper-slide">
+          <img src="assets/assets/ChatGPT Image Jul 5, 2025, 08_31_41 PM.png" alt="Memory 1" loading="lazy">
+        </div>
+        <div class="swiper-slide">
+          <img src="assets/assets/ChatGPT Image Jul 5, 2025, 08_41_57 PM.png" alt="Memory 2" loading="lazy">
+        </div>
+        <div class="swiper-slide">
+          <img src="assets/assets/ChatGPT Image Jul 5, 2025, 08_11_18 PM.png" width="10px"  alt="Memory 3 " loading="lazy">
+        </div>
+        <!-- ★ वीडियो डालना हो तो <video> टैग का प्रयोग करें -->
+      </div>
+
+      <!-- UI controls -->
+      <div class="swiper-pagination"></div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
+    </div>
+  </section>
+
+  <!-- Swiper JS (v11) -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  <!-- ---------- JavaScript ---------- -->
+  <script>
+    /* --- Unmute background music on first click/tap --- */
+    (() => {
+      const music = document.getElementById('bg-music');
+      const unlock = () => {
+        music.muted = false;
+        music.play().catch(() => {});
+        document.removeEventListener('click', unlock);
+      };
+      document.addEventListener('click', unlock, { once: true });
+    })();
+
+    /* --- Floating hearts every ~120ms --- */
+    (() => {
+      const createHeart = () => {
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        const dur = 4 + Math.random() * 4;
+        heart.style.setProperty('--dur', `${dur}s`);
+
+        // Four possible starting edges (top, bottom, left, right)
+        const directions = [
+          { top: '-10vh', left: `${Math.random() * 100}vw`, tx: `${(Math.random() - 0.5) * 100}vw`, ty: `120vh` },
+          { bottom: '-10vh', left: `${Math.random() * 100}vw`, tx: `${(Math.random() - 0.5) * 100}vw`, ty: `-120vh` },
+          { left: '-10vw', top: `${Math.random() * 100}vh`, tx: `120vw`, ty: `${(Math.random() - 0.5) * 100}vh` },
+          { right: '-10vw', top: `${Math.random() * 100}vh`, tx: `-120vw`, ty: `${(Math.random() - 0.5) * 100}vh` }
+        ];
+
+        const dir = directions[Math.floor(Math.random() * directions.length)];
+        Object.entries(dir).forEach(([k, v]) => heart.style[k] = v);
+        heart.style.setProperty('--tx', dir.tx);
+        heart.style.setProperty('--ty', dir.ty);
+
+        document.body.append(heart);
+        setTimeout(() => heart.remove(), 8000);
+      };
+      setInterval(createHeart, 120);
+    })();
+
+    /* --- Swiper init --- */
+    const mySwiper = new Swiper('.mySwiper', {
+      loop: true,
+      centeredSlides: true,
+      autoplay: { delay: 3000, disableOnInteraction: false },
+      pagination: { el: '.swiper-pagination', clickable: true },
+      navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+      keyboard: { enabled: true },
+      lazy: true
+    });
+  </script>
+</body>
+</html>
